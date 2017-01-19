@@ -218,7 +218,32 @@ player_dist <- function(df, player_id_A, player_id_B) {
      return(distsdf)
 }
 
+# data prep ----------------------------------------------------------
 
+prep_data_from_frame <- function(frame, game) {
+     
+     frame %>% 
+          
+          # filter to game of interest
+          filter(gameid == game) %>% 
+          
+          mutate(shot_clock = ifelse(is.na(shot_clock),0,shot_clock)) %>% 
+          arrange(quarter, desc(game_clock), shot_clock, x_loc)  %>%
+          
+          # label ball-side
+          mutate(ballside = ifelse(player_id == -1 & x_loc < 47, 'L', NA ),
+                 ballside = ifelse(player_id == -1 & x_loc >= 47, 'R', ballside) ) %>% 
+          
+          # label court-side
+          mutate(courtside = ifelse(x_loc < 47, 'L', 'R')) %>%
+          
+          # is player / ball in the paint
+          mutate(inPaint = in_paint(x_loc, y_loc) ) %>% 
+          
+          # take only distinct quarter-game_clock-player combinations
+          distinct(player_id, quarter, game_clock, .keep_all = T)
+     
+}
 
 
 

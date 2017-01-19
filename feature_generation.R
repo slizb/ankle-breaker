@@ -253,3 +253,20 @@ get_dist_features <- function(data,
      
 }
 
+get_ball_features <- function(data) {
+     
+     data %>% 
+          filter(player_id == -1) %>% 
+          group_by(playid) %>% 
+          mutate(dt = lag(game_clock) - game_clock,
+                 timeInPaint = ifelse(inPaint == T, dt, 0) ) %>% 
+          summarize(distanceTraveled = dist_traveled(x_loc, y_loc), 
+                    xDistanceTraveled = ax_dist(x_loc),
+                    yDistanceTraveled = ax_dist(y_loc),
+                    xSpread = ax_spread(x_loc),
+                    ySpread = ax_spread(y_loc),
+                    elapsedTime = max(game_clock) - min(game_clock),
+                    timeInPaint = sum(timeInPaint, na.rm = T) ) 
+     
+} 
+

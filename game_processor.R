@@ -11,7 +11,6 @@ library(stringr)
 library(data.table)
 
 source('functions.R')
-source('derivePlays_event.R')
 source('distance_based_features.R')
 
 csv <- c('./data/motion_data.csv')
