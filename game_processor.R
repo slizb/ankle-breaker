@@ -11,7 +11,7 @@ library(stringr)
 library(data.table)
 
 source('functions.R')
-source('distance_based_features.R')
+source('feature_engineering.R')
 
 csv <- c('./data/motion_data.csv')
 
